@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable no-alert */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -32,24 +34,26 @@ class Input extends Component {
   }
 
   addTicker() {
-    const { getTickers } = this.props;
-    const input = this.state;
-    if (input.price && input.ticker.length > 0) {
+    const { getTickers, tickers } = this.props;
+    if (tickers.length >= 5) {
+      alert('No more than 5 alerts at a time.');
+    } else {
+      const input = this.state;
       axios.post('/api/tickers/', input)
-        .then(() => {
-          getTickers();
-          this.setState({
-            ticker: '',
-            price: '',
-            selection: 'above',
-            user: '',
-          });
+        .then((result) => {
+          if (result.data.error) {
+            alert(result.data.error);
+          } else {
+            getTickers();
+            this.setState({
+              ticker: '',
+              price: '',
+              selection: 'above',
+              user: '',
+            });
+          }
         })
         .catch((err) => console.log(err));
-    } else {
-      // eslint-disable-next-line no-alert
-      // eslint-disable-next-line no-undef
-      alert('input fields required');
     }
   }
 
@@ -87,4 +91,5 @@ export default Input;
 
 Input.propTypes = {
   getTickers: PropTypes.func.isRequired,
+  tickers: PropTypes.array.isRequired,
 };

@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-undef */
+/* eslint-disable no-alert */
 import React, { Component } from 'react';
 import Input from './Input';
 import ListTicker from './ListTicker';
@@ -12,10 +15,30 @@ class Ticker extends Component {
     };
     this.getTickers = this.getTickers.bind(this);
     this.deleteTicker = this.deleteTicker.bind(this);
+    this.getPulse = this.getPulse.bind(this);
   }
 
   componentDidMount() {
     this.getTickers();
+    this.getPulse();
+  }
+
+  getPulse() {
+    const id = setInterval(() => {
+      axios.get('/api/pulse')
+        .then((res) => {
+          if (res.data.alert) {
+            alert(res.data.message);
+            axios.post('/api/resetpulse')
+              .then()
+              .catch((err) => { console.log(err); });
+            clearInterval(id);
+            this.getTickers();
+            this.getPulse();
+          }
+        })
+        .catch((err) => console.log(err));
+    }, 5000);
   }
 
   getTickers() {
@@ -46,7 +69,7 @@ class Ticker extends Component {
       <div id="main">
         <h1>Ticker Alerts</h1>
         <h4>Set and forget</h4>
-        <Input getTickers={this.getTickers} />
+        <Input getTickers={this.getTickers} tickers={tickers} />
         <ListTicker tickers={tickers} deleteTicker={this.deleteTicker} />
       </div>
     );
