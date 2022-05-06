@@ -13,7 +13,7 @@ function ListTicker({ tickers, deleteTicker }) {
           >
             <span>
               <span id="watching">
-                Watching:
+                L👀king at
               </span>
               <span id="ticker-name">
                 {info.ticker.toUpperCase()}

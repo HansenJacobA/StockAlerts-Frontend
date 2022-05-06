@@ -38,7 +38,7 @@ class Ticker extends Component {
           }
         })
         .catch((err) => console.log(err));
-    }, 5000);
+    }, 1000);
   }
 
   getTickers() {

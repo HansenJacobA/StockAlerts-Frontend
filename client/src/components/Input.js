@@ -45,12 +45,6 @@ class Input extends Component {
             alert(result.data.error);
           } else {
             getTickers();
-            this.setState({
-              ticker: '',
-              price: '',
-              selection: 'above',
-              user: '',
-            });
           }
         })
         .catch((err) => console.log(err));
